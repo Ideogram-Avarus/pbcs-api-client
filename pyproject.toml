@@ -1,0 +1,48 @@
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pbcs-api-client"
+version = "0.1.0"
+description = "Python client for the Oracle PBCS / EPM Cloud Planning REST APIs"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Typing :: Typed",
+]
+dependencies = [
+    "httpx>=0.28,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "pytest-cov>=6,<7",
+    "python-dotenv>=1,<2",
+    "pyright>=1.1.390",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pbcs_api_client"]
+
+[tool.hatch.build.targets.sdist]
+# Only what the package needs, so local files like .env never ship.
+include = ["pbcs_api_client", "tests", "README.md"]
+exclude = ["__pycache__"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.pyright]
+include = ["pbcs_api_client", "tests"]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+# Beyond strict: stale type: ignore comments, missing @override, mismatched property types.
+reportUnnecessaryTypeIgnoreComment = "error"
+reportImplicitOverride = "error"
+reportPropertyTypeMismatch = "error"
